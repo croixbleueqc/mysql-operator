@@ -1,7 +1,7 @@
 kopf[dev]
 kubernetes
 pydantic
-mysql-connector-python==8.0.26 # issue with 8.0.27 and Azure
+mysql-connector-python==8.4.0 # issue with 8.0.27 and Azure
 hvac
 pyyaml
 twine
