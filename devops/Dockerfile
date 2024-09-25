@@ -1,23 +1,17 @@
-FROM python:3.9-slim AS builder
+FROM python:3.10 AS builder
 
 WORKDIR /src
+
+RUN apt-get update && apt-get install -y \
+    git \
+    libssl-dev \
+    && rm -rf /var/lib/apt/lists/*
 
 COPY requirements.txt .
 RUN pip install -r requirements.txt
 
 COPY . .
 
-RUN python setup.py sdist bdist_wheel
+WORKDIR /src/myop
 
-# Production
-FROM python:3.9-slim
-
-WORKDIR /src
-
-RUN apt-get update && apt-get install -y \
-    git \
-    && rm -rf /var/lib/apt/lists/*
-COPY --from=builder /src/dist/*.whl .
-RUN pip install *.whl
-
-CMD kopf run -m myop --liveness=http://0.0.0.0:5000/healthz -A --peering=mysql-operator
+CMD kopf run --liveness=http://0.0.0.0:5000/healthz -A --peering=mysql-operator
