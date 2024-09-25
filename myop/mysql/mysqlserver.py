@@ -79,11 +79,10 @@ class MySQLServer():
             f"GRANT ALL ON `{database}`.* TO '{user}'@'%'"
         )
         cursor.execute("FLUSH PRIVILEGES")
-
         cursor.close()
 
         return {
-            "username": f"{user}@{self._instance.host}",
+            "username": user,
             "password": pwd,
             "url": "jdbc:mysql://{host}:{port}/{database}{options}".format( # pylint: disable=consider-using-f-string
                 host=self._instance.host,
